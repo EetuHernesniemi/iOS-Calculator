@@ -288,6 +288,9 @@
                             <constraint firstItem="W6W-76-B5I" firstAttribute="leading" secondItem="cux-nb-tfI" secondAttribute="leading" id="oW6-1t-iR9"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="displayLabel" destination="gC2-i9-XzD" id="ZnY-DW-KL1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b3E-z2-QY8" sceneMemberID="firstResponder"/>
             </objects>
