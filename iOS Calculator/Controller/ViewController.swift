@@ -11,6 +11,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var displayLabel: UILabel!
     
     private var isFinishedTypingNumber: Bool = true
+    private var calculator = CalculatorLogic()
     
     private var displayValue: Double {
         get {
@@ -28,34 +29,27 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
-
+    
     @IBAction func calcButtonPressed(_ sender: UIButton) {
         isFinishedTypingNumber = true
-      
-        if let calcMethod = sender.currentTitle {
-            let calculator = CalculatorLogic(number: displayValue)
-            guard let result = calculator.calculate(symbol: calcMethod) else {
-                fatalError("the result of the calculation is nil.")
-            }
-            displayValue = result
-        }
         
+        calculator.setNumber(displayValue)
+        
+        if let calcMethod = sender.currentTitle {
+            if let result = calculator.calculate(symbol: calcMethod) {
+                displayValue = result
+            }
+        }
     }
-    
     
     @IBAction func numButtonPressed(_ sender: UIButton) {
         if let numValue = sender.currentTitle {
-            
             if isFinishedTypingNumber {
                 displayLabel.text = numValue
                 isFinishedTypingNumber = false
             } else {
                 if numValue == "." {
-                    guard let currentDisplayValue = Double(displayLabel.text!) else {
-                        fatalError("Cannot convert display label text to a Double!")
-                    }
-                    
-                    let isInt = floor(currentDisplayValue) == currentDisplayValue
+                    let isInt = floor(displayValue) == displayValue
                     
                     if !isInt {
                         return
@@ -63,8 +57,6 @@ class ViewController: UIViewController {
                 }
                 displayLabel.text = displayLabel.text! + numValue
             }
-            
-            
         }
     }
     

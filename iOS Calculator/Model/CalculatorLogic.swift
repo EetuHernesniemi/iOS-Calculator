@@ -7,21 +7,53 @@
 
 import Foundation
 
-class CalculatorLogic {
-    var number: Double
+struct CalculatorLogic {
+    private var number: Double?
     
-    init(number: Double) {
+    private var intermediateCalculation: (n1: Double, calcMethod: String)?
+    
+    mutating func setNumber(_ number: Double) {
         self.number = number
     }
     
-    func calculate(symbol: String) -> Double? {
-            if symbol == "+/-" {
-                return number * -1
-            } else if symbol == "AC" {
+    mutating func calculate(symbol: String) -> Double? {
+        if let n = number {
+            switch symbol {
+            case "+/-":
+                return n * -1
+            case "AC":
                 return 0
-            } else if symbol == "%" {
-                return number * 0.01
+            case "%":
+                return n * 0.01
+            case "=":
+                return performTwoNumCalculation(n2: n)
+            default:
+                intermediateCalculation = (n1: n, calcMethod: symbol)
             }
+        }
+        return nil
+    }
+    
+    private func performTwoNumCalculation(n2: Double) -> Double? {
+        if let n1 = intermediateCalculation?.n1
+            , let operation = intermediateCalculation?.calcMethod {
+            
+            switch operation {
+            case "+":
+                return n1 + n2
+            case "-":
+                return n1 - n2
+            case "×":
+                return n1 * n2
+            case "÷":
+                if n2 == 0 {
+                    return nil
+                }
+                return n1/n2
+            default:
+                fatalError("Operation failure in calculation.")
+            }
+        }
         return nil
     }
 }
