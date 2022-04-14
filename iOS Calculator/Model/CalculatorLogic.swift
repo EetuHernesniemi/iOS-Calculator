@@ -18,17 +18,21 @@ struct CalculatorLogic {
     
     mutating func calculate(symbol: String) -> Double? {
         if let n = number {
+            var result : Double?
             switch symbol {
             case "+/-":
-                return n * -1
+                result = n * -1
             case "AC":
-                return 0
+                result = 0
             case "%":
-                return n * 0.01
+                result = n * 0.01
             case "=":
-                return performTwoNumCalculation(n2: n)
+                result = performTwoNumCalculation(n2: n)
             default:
                 intermediateCalculation = (n1: n, calcMethod: symbol)
+            }
+            if let safeResult : Double = result {
+                return roundCalcResult(n: safeResult)
             }
         }
         return nil
@@ -55,5 +59,9 @@ struct CalculatorLogic {
             }
         }
         return nil
+    }
+    
+    private func roundCalcResult(n: Double) -> Double{
+        return Double(round(1000 * n) / 1000)
     }
 }
